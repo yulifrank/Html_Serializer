@@ -19,27 +19,7 @@ void PrintTree(HtmlElement root, int level)
 {
     if (root == null)
         return;
-         Console.ForegroundColor = ConsoleColor.Red;
-
-    // Set the color based on the level
-    //switch (level % 5) // Assuming you want to cycle through 5 colors
-    //{
-    //    case 0:
-    //        Console.ForegroundColor = ConsoleColor.Red;
-    //        break;
-    //    case 1:
-    //        Console.ForegroundColor = ConsoleColor.Green;
-    //        break;
-    //    case 2:
-    //        Console.ForegroundColor = ConsoleColor.Blue;
-    //        break;
-    //    case 3:
-    //        Console.ForegroundColor = ConsoleColor.Yellow;
-    //        break;
-    //    case 4:
-    //        Console.ForegroundColor = ConsoleColor.Magenta;
-    //        break;
-    //}
+         Console.ForegroundColor = ConsoleColor.Green;
     Console.WriteLine(  level);
 
     Console.WriteLine(root);
@@ -166,35 +146,22 @@ HtmlElement BuildTree(List<string> htmlLines)
     return root;
 }
 
-var html = await Load("https://learn.malkabruk.co.il/practicode/projects/pract-2/");
+var html = await Load("https://www.hidabroot.org/shabbat");
 var cleanHtml = new Regex("\\s+").Replace(html, " ");
 var htmlLines = new Regex("<(.*?)>").Split(cleanHtml).Where(s => s.Length > 0).ToList();
 
 var root = BuildTree(htmlLines);
-
-PrintTree(root,0);
-string s = "header.nav";
+//$$("div#lang-switcher li.language-switcher__list-item")
+//PrintTree(root,0);
+string s = "div.hp_grid div.main_side div.head_content a";
 Selector selector = Selector.FromQueryString(s);
 Console.WriteLine(selector);
 List<HtmlElement> list = root.GetElementsBySelector(selector).ToList();
-await Console.Out.WriteLineAsync("match element");
+await Console.Out.WriteLineAsync("match element: "+ list.Count());
 foreach (var element in list)
 {
     Console.WriteLine(element);
 }
-
-//Console.WriteLine(  selector );
-//Console.WriteLine(selector.Parent);
-//Console.WriteLine(selector.Child);
-//Console.WriteLine(  selector.Child );
-//    Console.WriteLine(selector.Parent);  
-//Console.WriteLine(selector.Child.TagName);  // null
-//Console.WriteLine(selector.Child.Parent.TagName);  // div
-//Console.WriteLine(selector.Child.Child);  // null
-
-
-//HashSet<HtmlElement> hash = root.FindBySelector();
-//hash.ToList<HtmlElement>().ForEach(a => Console.WriteLine(a));
 
 
 Console.WriteLine("---");

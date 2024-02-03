@@ -74,76 +74,7 @@ namespace Html_Serializer
                 currentSelector = selector;
             }
 
-            return rootSelector;
-        }
-        public static Selector FromQueryString1(string queryString)
-        {
-            var selectors = queryString.Split(' ');
-            Selector root = null;
-            var newSelector = new Selector();
-            var currentSelector = new Selector();
-            var parts = queryString.Split(' ');
-            var tagName = "";
-            foreach (var queryStr in selectors)
-            {
-                newSelector = new Selector();
-
-                var query = queryStr;
-
-                if (query.IndexOf('#') > 0)
-                    tagName = query.Substring(0, query.IndexOf('#'));
-                else if (query.IndexOf('.') > 0)
-                    tagName = query.Substring(0, query.IndexOf('.'));
-                else tagName = query;
-                if (HtmlHelper.Instance.AllTags.Contains(tagName))
-                {
-                    currentSelector.TagName = tagName;
-                    tagName = "";
-                    if (query.IndexOf('#') > 0)
-                        query = query.Substring(query.IndexOf('#'));
-                    else if (query.IndexOf('.') > 0)
-                        query = query.Substring(query.IndexOf('.'));
-
-                }
-                if (query.IndexOf('#') >= 0)
-                {
-                    if (query.IndexOf('.') > 0)
-                    {
-                        currentSelector.Id = query.Substring(1, query.IndexOf('.'));
-                        parts = query.Split('.');
-                        currentSelector.Classes = new List<string>(parts.Skip(1));
-
-                    }
-                    else
-                        currentSelector.Id = query.Substring(1);
-
-                }
-                else
-                {
-
-                    parts = query.Split('.');
-                    currentSelector.Classes = new List<string>(parts.Skip(1));
-                }
-                if (root == null)
-                {
-                    currentSelector.Parent = null;
-                    currentSelector.Child = newSelector;
-                    root = currentSelector;
-                    newSelector.Parent = currentSelector;
-
-                }
-                else
-                {
-                    currentSelector.Child = newSelector;
-                    newSelector.Parent = currentSelector;
-                }
-
-                currentSelector = newSelector;
-            }
-            if (currentSelector.Parent != null)
-                currentSelector.Parent.Child = null;
-
-            return root;
+            return currentSelector;
         }
 
     
