@@ -7,20 +7,12 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-async Task<string> Load(string url)
-{
-    HttpClient client = new HttpClient();
-    var response = await client.GetAsync(url);
-    var html = await response.Content.ReadAsStringAsync();
-    return html;
-}
-
 void PrintTree(HtmlElement root, int level)
 {
     if (root == null)
         return;
-         Console.ForegroundColor = ConsoleColor.Green;
-    Console.WriteLine(  level);
+    Console.ForegroundColor = ConsoleColor.Green;
+    Console.WriteLine(level);
 
     Console.WriteLine(root);
     Console.ResetColor(); // Reset the console color
@@ -73,8 +65,16 @@ void PrintTreeByLevel(HtmlElement element, int indentLevel = 0)
         Console.WriteLine($"{indentation}</{element.Name}>");
     }
 }
+async Task<string> Load(string url)
+{
+    HttpClient client = new HttpClient();
+    var response = await client.GetAsync(url);
+    var html = await response.Content.ReadAsStringAsync();
+    return html;
+}
 
-HtmlElement BuildTree(List<string> htmlLines)
+
+HtmlElement Serialize(List<string> htmlLines)
 {
     var root = new HtmlElement();
     var currentElement = root;
@@ -85,13 +85,13 @@ HtmlElement BuildTree(List<string> htmlLines)
 
         if (firstWord == "/html")
         {
-            break; // Reached end of HTML
+            break; 
         }
         else if (firstWord.StartsWith("/"))
         {
-            if (currentElement.Parent != null) // Make sure there is a valid parent
+            if (currentElement.Parent != null) 
             {
-                currentElement = currentElement.Parent; // Go to previous level in the tree
+                currentElement = currentElement.Parent; 
             }
         }
         else if (HtmlHelper.Instance.AllTags.Contains(firstWord))
@@ -99,7 +99,7 @@ HtmlElement BuildTree(List<string> htmlLines)
             var newElement = new HtmlElement();
             newElement.Name = firstWord;
 
-            // Handle attributes
+          
             var restOfString = line.Remove(0, firstWord.Length);
             var attributes = Regex.Matches(restOfString, "([a-zA-Z]+)=\\\"([^\\\"]*)\\\"")
                 .Cast<Match>()
@@ -138,7 +138,6 @@ HtmlElement BuildTree(List<string> htmlLines)
         }
         else
         {
-            // Text content
             currentElement.InnerHtml = line;
         }
     }
@@ -146,14 +145,19 @@ HtmlElement BuildTree(List<string> htmlLines)
     return root;
 }
 
-var html = await Load("https://www.hidabroot.org/shabbat");
+var html = await Load("https://www.mehalev.co.il/");
 var cleanHtml = new Regex("\\s+").Replace(html, " ");
 var htmlLines = new Regex("<(.*?)>").Split(cleanHtml).Where(s => s.Length > 0).ToList();
 
-var root = BuildTree(htmlLines);
-//$$("div#lang-switcher li.language-switcher__list-item")
+var root = Serialize(htmlLines);
 //PrintTree(root,0);
-string s = "div.hp_grid div.main_side div.head_content a";
+var Ancestors = root.Ancestors().ToList();
+var Descendants = root.Descendants().ToList();
+//$$("div img")
+//$$("form#searchform input") 
+//$$("div.container div#header div#s-share-buttons a")
+//https://www.mehalev.co.il/
+string s = "form#searchform input";
 Selector selector = Selector.FromQueryString(s);
 Console.WriteLine(selector);
 List<HtmlElement> list = root.GetElementsBySelector(selector).ToList();

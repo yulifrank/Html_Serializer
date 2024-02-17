@@ -29,8 +29,6 @@ namespace Html_Serializer
             Selector rootSelector = null;
             Selector currentSelector = null;
             string[] validHtmlTags = HtmlHelper.Instance.SelfClosingTags.Concat(HtmlHelper.Instance.AllTags).ToArray();
-
-
             foreach (string selectorString in selectorStrings)
             {
                 Selector selector = new Selector();
@@ -77,15 +75,8 @@ namespace Html_Serializer
             return currentSelector;
         }
 
-    
-
-
-
-
-
-
-
-private static bool IsValidHtmlTagName(string tagName, string[] validHtmlTags)
+   
+     private static bool IsValidHtmlTagName(string tagName, string[] validHtmlTags)
         {
             return validHtmlTags.Contains(tagName, StringComparer.OrdinalIgnoreCase);
         }
@@ -111,86 +102,3 @@ private static bool IsValidHtmlTagName(string tagName, string[] validHtmlTags)
 
 
 
-
-
-//public static Selector FromQueryString(string queryString)
-//{
-//    string[] validHtmlTags = HtmlHelper.Instance.AllTags
-//        .Concat(HtmlHelper.Instance.SelfClosingTags)
-//        .ToArray();
-
-//    Selector root = new Selector();
-//    Selector currentSelector = root;
-
-//    // Define regex pattern to match tag, id, and class
-//    string pattern = @"(?<tag>\w+)?(?<id>#\w+)?(?<classes>(?:\.\w+)*)";
-
-//    // Use regex to match tag, id, and class in the queryString
-//    foreach (Match match in Regex.Matches(queryString, pattern))
-//    {
-//        // Extract tag, id, and classes from the match
-//        string tag = match.Groups["tag"].Value;
-//        string id = match.Groups["id"].Value.TrimStart('#');
-//        string classes = match.Groups["classes"].Value.Replace(".", " ").Trim();
-
-//        // Check if the tag is valid
-//        if (!string.IsNullOrEmpty(tag) && !validHtmlTags.Contains(tag))
-//        {
-//            // Handle invalid tag
-//            throw new ArgumentException($"Invalid HTML tag: {tag}");
-//        }
-
-//        // Set properties of currentSelector based on the match
-//        currentSelector.TagName = tag;
-//        currentSelector.Id = id;
-//        if (!string.IsNullOrEmpty(classes))
-//        {
-//            currentSelector.Classes.AddRange(classes.Split());
-//        }
-
-//        // Create a new child selector for the next iteration
-//        Selector newSelector = new Selector();
-//        newSelector.Parent = currentSelector;
-//        currentSelector.Child = newSelector;
-//        currentSelector = newSelector;
-//    }
-
-//    return root;
-//}
-
-//public static Selector GetSelector(string str)
-//{
-//    Selector rootSelector = null, currentSelector = null;
-//    string[] validHtmlTags = HtmlHelper.Instance.AllTags
-//                .Concat(HtmlHelper.Instance.SelfClosingTags)
-//                .ToArray();
-//    var arrStr = str.Split(" ");
-//    foreach (var item in arrStr)
-//    {
-//        Selector newSelector = new Selector();
-//        string[] strSelector = item.Split(new char[] { '#', '.' }).ToArray();
-//        if (strSelector[0] != "" && (validHtmlTags.Contains(strSelector[0])))
-//        {
-//            newSelector.TagName = strSelector[0];
-//        }
-//        if (strSelector.Count() > 1)
-//            newSelector.Id = strSelector[1];
-//        if (strSelector.Count() > 2)
-//            newSelector.Classes.Add(strSelector[2]);
-//        if (currentSelector == null)
-//        {
-//            currentSelector = new Selector();
-//            newSelector.Parent = null;
-//            rootSelector = newSelector;
-//        }
-//        else
-//        {
-//            newSelector.Parent = currentSelector;
-//            currentSelector.Child = newSelector;
-//        }
-
-//        currentSelector = newSelector;
-//    }
-//    return rootSelector;
-
-//}
